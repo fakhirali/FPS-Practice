@@ -1,20 +1,22 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[2]:
+# In[33]:
 
 
 import pygame
 import random
+import time
+import math
 
 
-# In[3]:
+# In[4]:
 
 
 pygame.init()
 
 
-# In[4]:
+# In[5]:
 
 
 background_colour = (255,255,255)
@@ -23,7 +25,7 @@ width = 600
 height = 600
 
 
-# In[5]:
+# In[9]:
 
 
 class Target:
@@ -46,7 +48,68 @@ class Target:
     
 
 
-# In[6]:
+# In[10]:
+
+
+def makeTarget():
+    t = Target(height,width,screen)
+    t.draw()
+    pygame.display.flip()
+    return t
+
+
+# In[59]:
+
+
+def DisplaySmth(thing, pos):
+    font = pygame.font.SysFont(fonts[0],32)
+    text = font.render(thing, True, background_colour)
+    screen.blit(text,(width/4,(height/4)+(32*pos)))
+    pygame.display.flip()
+
+
+# In[66]:
+
+
+def endDisplay(avg):
+    thing = "Average time: "+str(round(avg,3)) +" s"
+    DisplaySmth(thing,0)
+
+
+# In[71]:
+
+
+def DisplayCount(count):
+    thing = "Total dots: "+str(count)
+    DisplaySmth(thing,1)
+
+
+# In[72]:
+
+
+def getDistance(p,q):
+    x,y = p
+    a,b = q
+    return math.sqrt(pow((x-a),2)+pow((y-b),2))
+
+
+# In[73]:
+
+
+def DisplayDistance(distance):
+    thing = "Total Distance: " + str(round(distance,3)) + " px"
+    DisplaySmth(thing,2)
+
+
+# In[74]:
+
+
+def DisplayDistancePerSec(distancePerSec):
+    thing = "Distance per pixel: " + str(round(distancePerSec,3)) + " per px"
+    DisplaySmth(thing,3)
+
+
+# In[75]:
 
 
 screen = pygame.display.set_mode((width,height))
@@ -54,23 +117,12 @@ pygame.display.toggle_fullscreen()
 pygame.display.set_caption("Shoot")
 screen.fill(background_colour)
 
-
-# In[7]:
-
-
-
-def makeTarget():
-    t = Target(height,width,screen)
-    t.draw()
-    pygame.display.flip()
-    return t;
-
-
-# In[8]:
-
-
 t = makeTarget()
 
+distance = 0
+prevPos = (0,0)
+count = 0
+allTimes = []
 running = True
 end = False
 while running:
@@ -80,13 +132,30 @@ while running:
         elif event.type == pygame.MOUSEBUTTONDOWN:
             mpos = pygame.mouse.get_pos()
             if abs(mpos[0] - t.pos[0]) <= t.scale and abs(mpos[1] - t.pos[1]) <= t.scale:
-                
+                count += 1
+                if timeTrack == 0:
+                    prevPos = t.pos
+                    timeTrack = time.time()
+                else:
+                    distance += getDistance(t.pos,prevPos)
+                    prevPos = t.pos
+                    allTimes.append(time.time()-timeTrack)
+                    timeTrack = time.time()
                 screen.fill(background_colour)
                 t = makeTarget()
-                
             elif not end:
                 end = True
                 screen.fill(end_color)
+                if len(allTimes) > 0:
+                    endDisplay(sum(allTimes)/len(allTimes))
+                    DisplayDistancePerSec(distance/sum(allTimes))
+                DisplayCount(count)
+                DisplayDistance(distance)
+                distance = 0
+                prevPos = (0,0)
+                count = 0
+                allTimes = []
+                timeTrack = 0
                 pygame.display.flip()
             else:
                 end = False
@@ -98,7 +167,7 @@ while running:
 pygame.display.quit()
 
 
-# In[ ]:
+# In[69]:
 
 
 pygame.display.quit()
