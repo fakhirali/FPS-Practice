@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[1]:
+# In[5]:
 
 
 import pygame
@@ -10,7 +10,7 @@ import time
 import math
 
 
-# In[2]:
+# In[6]:
 
 
 class Target:
@@ -34,7 +34,7 @@ class Target:
     
 
 
-# In[3]:
+# In[7]:
 
 
 def makeTarget():
@@ -43,7 +43,7 @@ def makeTarget():
     return t
 
 
-# In[4]:
+# In[8]:
 
 
 def DisplaySmth(thing, pos):
@@ -53,7 +53,7 @@ def DisplaySmth(thing, pos):
     pygame.display.flip()
 
 
-# In[5]:
+# In[9]:
 
 
 def DisplayAvg(avg):
@@ -61,7 +61,7 @@ def DisplayAvg(avg):
     DisplaySmth(thing,0)
 
 
-# In[6]:
+# In[10]:
 
 
 def DisplayCount(count):
@@ -69,7 +69,7 @@ def DisplayCount(count):
     DisplaySmth(thing,1)
 
 
-# In[7]:
+# In[11]:
 
 
 def getDistance(p,q):
@@ -78,7 +78,7 @@ def getDistance(p,q):
     return math.sqrt(pow((x-a),2)+pow((y-b),2))
 
 
-# In[8]:
+# In[12]:
 
 
 def DisplayDistance(distance):
@@ -86,21 +86,21 @@ def DisplayDistance(distance):
     DisplaySmth(thing,2)
 
 
-# In[9]:
+# In[13]:
 
 
 def DisplayDistancePerSec(distancePerSec):
-    thing = "Distance per pixel: " + str(round(distancePerSec,3)) + " per px"
+    thing = "Distance per second: " + str(round(distancePerSec,3)) + " per s"
     DisplaySmth(thing,3)
 
 
-# In[10]:
+# In[14]:
 
 
 pygame.init()
 
 
-# In[11]:
+# In[15]:
 
 
 background_colour = (255,255,255)
@@ -109,7 +109,7 @@ width = 600
 height = 600
 
 
-# In[12]:
+# In[16]:
 
 
 screen = pygame.display.set_mode((width,height))
