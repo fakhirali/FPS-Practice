@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[33]:
+# In[1]:
 
 
 import pygame
@@ -10,22 +10,7 @@ import time
 import math
 
 
-# In[4]:
-
-
-pygame.init()
-
-
-# In[5]:
-
-
-background_colour = (255,255,255)
-end_color = (0,0,255)
-width = 600
-height = 600
-
-
-# In[9]:
+# In[2]:
 
 
 class Target:
@@ -45,38 +30,38 @@ class Target:
     def draw(self):
         self.pos = self.getPos()
         pygame.draw.circle(screen, self.color, self.pos, self.scale)
+        pygame.display.flip()
     
 
 
-# In[10]:
+# In[3]:
 
 
 def makeTarget():
     t = Target(height,width,screen)
     t.draw()
-    pygame.display.flip()
     return t
 
 
-# In[59]:
+# In[4]:
 
 
 def DisplaySmth(thing, pos):
-    font = pygame.font.SysFont(fonts[0],32)
+    font = pygame.font.SysFont(pygame.font.get_fonts()[0],32)
     text = font.render(thing, True, background_colour)
     screen.blit(text,(width/4,(height/4)+(32*pos)))
     pygame.display.flip()
 
 
-# In[66]:
+# In[5]:
 
 
-def endDisplay(avg):
+def DisplayAvg(avg):
     thing = "Average time: "+str(round(avg,3)) +" s"
     DisplaySmth(thing,0)
 
 
-# In[71]:
+# In[6]:
 
 
 def DisplayCount(count):
@@ -84,7 +69,7 @@ def DisplayCount(count):
     DisplaySmth(thing,1)
 
 
-# In[72]:
+# In[7]:
 
 
 def getDistance(p,q):
@@ -93,7 +78,7 @@ def getDistance(p,q):
     return math.sqrt(pow((x-a),2)+pow((y-b),2))
 
 
-# In[73]:
+# In[8]:
 
 
 def DisplayDistance(distance):
@@ -101,7 +86,7 @@ def DisplayDistance(distance):
     DisplaySmth(thing,2)
 
 
-# In[74]:
+# In[9]:
 
 
 def DisplayDistancePerSec(distancePerSec):
@@ -109,7 +94,22 @@ def DisplayDistancePerSec(distancePerSec):
     DisplaySmth(thing,3)
 
 
-# In[75]:
+# In[10]:
+
+
+pygame.init()
+
+
+# In[11]:
+
+
+background_colour = (255,255,255)
+end_color = (0,0,255)
+width = 600
+height = 600
+
+
+# In[12]:
 
 
 screen = pygame.display.set_mode((width,height))
@@ -119,6 +119,7 @@ screen.fill(background_colour)
 
 t = makeTarget()
 
+timeTrack = 0
 distance = 0
 prevPos = (0,0)
 count = 0
@@ -147,7 +148,7 @@ while running:
                 end = True
                 screen.fill(end_color)
                 if len(allTimes) > 0:
-                    endDisplay(sum(allTimes)/len(allTimes))
+                    DisplayAvg(sum(allTimes)/len(allTimes))
                     DisplayDistancePerSec(distance/sum(allTimes))
                 DisplayCount(count)
                 DisplayDistance(distance)
@@ -164,12 +165,6 @@ while running:
                 t.draw()
                 pygame.display.flip()
                 
-pygame.display.quit()
-
-
-# In[69]:
-
-
 pygame.display.quit()
 
 
